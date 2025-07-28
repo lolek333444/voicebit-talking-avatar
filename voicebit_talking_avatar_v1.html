@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>VoiceBit Talking AI</title>
+  <script src="https://unpkg.com/@vapi-ai/web"></script>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      padding: 20px;
+    }
+    iframe {
+      margin-top: 20px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <h2>🎤 VoiceBit Talking AI Assistant</h2>
+  <button id="start-button">Start Talking</button>
+  <iframe
+    id="avatar-frame"
+    width="600"
+    height="600"
+    src="https://talk.d-id.com/?script=hello&apiKey=bG92cmVAdm9pY2ViaXQuYWk:jigTMLTNUEzNkC3N6PPao"
+    allow="microphone; autoplay"
+  ></iframe>
+
+  <script>
+    const vapi = new Vapi({
+      assistantId: "99876007-cfdf-4df8-b176-046d3a791679",
+      shareKey: "612d1dae-2848-4e6e-9f2c-480d8250d48a"
+    });
+
+    const avatarIframe = document.getElementById("avatar-frame");
+
+    document.getElementById("start-button").onclick = () => {
+      vapi.start();
+    };
+
+    vapi.on('message', (msg) => {
+      if (msg.type === 'assistant') {
+        avatarIframe.contentWindow.postMessage(
+          {
+            type: "start",
+            payload: {
+              script: { type: "text", input: msg.message },
+              config: { apiKey: "bG92cmVAdm9pY2ViaXQuYWk:jigTMLTNUEzNkC3N6PPao" }
+            }
+          },
+          "*"
+        );
+      }
+    });
+  </script>
+</body>
+</html>
